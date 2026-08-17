@@ -1,0 +1,10 @@
+{
+  "name":"CHRONOS — Human History",
+  "short_name":"CHRONOS",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#161715",
+  "theme_color":"#161715",
+  "description":"Explore 300,000 years of human history through time, place, causality and connections.",
+  "icons":[{"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}

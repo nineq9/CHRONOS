@@ -1,4 +1,4 @@
-const CACHE='chronos-human-v2-20260818c';
+const CACHE='chronos-human-v2-20260818d';
 const CORE=['./','./index.html','./data.js','./app.js','./ui-v2.html','./styles-v2.css','./logic-v2.js','./logic-v2.part1.txt','./logic-v2.part2.txt','./manifest.webmanifest','./icon.svg'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));

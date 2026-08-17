@@ -1,5 +1,5 @@
 (async()=>{
-  const V='20260818c';
+  const V='20260818d';
   document.querySelector('link[href$="styles.css"]')?.remove();
   const link=document.createElement('link');
   link.rel='stylesheet';link.href=`./styles-v2.css?v=${V}`;document.head.appendChild(link);

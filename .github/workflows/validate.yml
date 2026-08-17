@@ -1,0 +1,24 @@
+name: Validate CHRONOS
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Rebuild and syntax-check v2 logic
+        run: |
+          cat logic-v2.part1.txt logic-v2.part2.txt > /tmp/chronos-v2.js
+          node --check /tmp/chronos-v2.js
+          node --check app.js
+          node --check logic-v2.js
+      - name: Check required v2 files
+        run: |
+          test -s ui-v2.html
+          test -s styles-v2.css
+          test -s data.js

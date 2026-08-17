@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ja" data-theme="dark" data-lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#161715" id="themeColor">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CHRONOS">
+  <meta name="description" content="人類30万年を、原因・出来事・結果・現代へのつながりから理解する歴史探索アプリ。">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Noto+Serif+JP:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <title>CHRONOS — 世界史を、つながりで理解する</title>
+</head>
+<body>
+<div id="app">
+  <header id="topbar" class="topbar" hidden>
+    <button class="wordmark bare-action" data-route="home" aria-label="HOME">CHRONOS</button>
+    <div class="top-actions">
+      <button class="circle-action lang-action" data-action="language"><span id="langButton">RU</span></button>
+      <button class="circle-action" data-action="search" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.3"/><path d="m15.3 15.3 4.4 4.4"/></svg></button>
+      <button class="circle-action" data-action="theme" aria-label="Theme"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M12 2.2v2.2M12 19.6v2.2M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2.2 12h2.2M19.6 12h2.2M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/></svg></button>
+      <button class="circle-action" data-action="menu" aria-label="Menu"><svg viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h14"/></svg></button>
+    </div>
+  </header>
+
+  <main>
+    <section class="screen active" data-screen="home" id="homeScreen">
+      <div class="hero">
+        <img class="hero-art" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/The_Tower_of_Babel_%28Bruegel%29.jpg/1280px-The_Tower_of_Babel_%28Bruegel%29.jpg" alt="The Tower of Babel by Pieter Bruegel the Elder">
+        <div class="hero-shade"></div>
+        <div class="hero-inner">
+          <div class="hero-head">
+            <div class="hero-brand"><div class="wordmark">CHRONOS</div><small data-i18n="brandSub">UNDERSTAND THE HUMAN WORLD</small></div>
+            <div class="top-actions home-actions">
+              <button class="circle-action lang-action" data-action="language"><span class="langButton">RU</span></button>
+              <button class="circle-action" data-action="search" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.3"/><path d="m15.3 15.3 4.4 4.4"/></svg></button>
+              <button class="circle-action" data-action="theme" aria-label="Theme"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M12 2.2v2.2M12 19.6v2.2M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2.2 12h2.2M19.6 12h2.2M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/></svg></button>
+              <button class="circle-action" data-action="menu" aria-label="Menu"><svg viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h14"/></svg></button>
+            </div>
+          </div>
+          <div class="hero-copy-wrap">
+            <h1 class="hero-title" id="heroTitle"><span data-i18n="heroLine1">世界史を、つながりで</span><span data-i18n="heroLine2">理解する</span></h1>
+            <p class="hero-copy" data-i18n="heroCopy">人類30万年を、ひとつの物語として。</p>
+            <button class="primary-action" data-route="timeline"><span data-i18n="start">時間を旅する</span><span aria-hidden="true">→</span></button>
+          </div>
+          <section class="time-dial" aria-label="Time dial">
+            <div class="time-dial-head"><span>TIME DIAL</span><span data-i18n="dialRange">約30万年前 — 2026</span></div>
+            <div class="dial-live" id="dialLive"><strong id="dialYear">1492</strong><span id="dialEvent">大西洋世界の転換</span></div>
+            <input id="homeTimeSlider" class="time-slider" type="range" min="0" max="1000" step="1" value="780" aria-label="年代を選ぶ">
+            <div id="dialTicks" class="dial-ticks"></div>
+            <p class="dial-hint" data-i18n="dialHint">指を離すと、その時代の「人類史の巻物」へ移動します。</p>
+          </section>
+        </div>
+      </div>
+      <div class="home-body page-pad">
+        <section class="home-section">
+          <div class="eyebrow" data-i18n="continueEyebrow">CONTINUE</div><h2 class="section-title" data-i18n="continueTitle">前回のつながりから続ける</h2>
+          <button class="resume-card pressable-card" data-event="french-revolution"><span class="resume-meta">1789 · EUROPE</span><strong data-i18n="resumeEvent">フランス革命</strong><small data-i18n="resumeCopy">財政・思想・食料価格が、なぜ同じ瞬間に政治変動へつながったのか。</small><span class="card-arrow">→</span></button>
+        </section>
+        <section class="home-section">
+          <div class="eyebrow" data-i18n="discoveryEyebrow">TODAY'S CONNECTION</div><h2 class="section-title" data-i18n="discoveryTitle">今日の意外なつながり</h2>
+          <button class="discovery-card pressable-card" data-event="printing-revolution"><div class="discovery-icon">Aa</div><div><strong data-i18n="discoveryCardTitle">活版印刷 × 宗教改革 × 情報の暴走</strong><small data-i18n="discoveryCardCopy">印刷革命と現代のSNSは、どこが似ていて、どこが違う？</small></div><span class="card-arrow">→</span></button>
+        </section>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="timeline" id="timelineScreen"><div class="page-pad top-space timeline-page">
+      <div class="timeline-intro"><div class="eyebrow">HUMAN STORY</div><h1 class="page-title" data-i18n="timelineTitle">人類史の巻物</h1><p class="page-copy" data-i18n="timelineCopy">横に時間を送り、気になる出来事から人類史へ潜っていきます。</p><button class="text-action" data-action="prehuman"><span data-i18n="prehuman">人類以前を見る</span><span>↗</span></button></div>
+      <div class="timeline-toolbar"><div class="timeline-now"><span id="timelineNowYear">1492</span><small id="timelineNowLabel">大西洋世界の転換</small></div><div class="timeline-filters" id="timelineFilters"></div></div>
+      <section class="scroll-section"><div class="scroll-instructions"><span data-i18n="scrollHint">← 時間を横に送る →</span><span data-i18n="zoomHint">出来事をタップすると詳細へ</span></div><div class="history-scroll" id="historyScroll" tabindex="0"><div class="history-canvas" id="historyCanvas"></div></div></section>
+      <section class="timeline-map-section"><div class="section-head-inline"><div><div class="eyebrow" data-i18n="mapEyebrow">WORLD MAP</div><h2 class="section-title" data-i18n="mapTitle">その瞬間、世界のどこで？</h2></div><button class="small-action" data-action="map-expand" data-i18n="expand">拡大</button></div><div class="world-map-card"><svg id="timelineWorldMap" class="world-map" viewBox="0 0 960 500"></svg><div id="mapTooltip" class="map-tooltip" hidden></div></div><div id="mapContext" class="map-context"></div></section>
+    </div></section>
+
+    <section class="screen" data-screen="event" id="eventScreen"><div class="page-pad top-space event-page">
+      <button class="bare-back" data-action="back"><span>←</span><span data-i18n="back">戻る</span></button>
+      <div class="event-hero"><div class="event-kicker" id="eventKicker">1789 · EUROPE</div><h1 class="event-title" id="eventTitle">フランス革命</h1><p class="event-lead" id="eventLead"></p><div id="eventMeta" class="event-meta"></div></div>
+      <nav class="event-tabs" id="eventTabs"><button class="event-tab active" data-event-tab="story" data-i18n="tabStory">STORY</button><button class="event-tab" data-event-tab="connections" data-i18n="tabConnections">CONNECTIONS</button><button class="event-tab" data-event-tab="world" data-i18n="tabWorld">WORLD</button><button class="event-tab" data-event-tab="meaning" data-i18n="tabMeaning">MEANING</button></nav>
+      <section class="event-panel active" data-event-panel="story"><div class="content-grid"><article class="narrative-card no-border-card"><div class="eyebrow" data-i18n="whatHappened">WHAT HAPPENED</div><h2 id="storyHeadline" class="section-title"></h2><div id="storyBody" class="reading-copy"></div></article><aside class="facts-rail" id="eventFacts"></aside></div></section>
+      <section class="event-panel" data-event-panel="connections"><div class="eyebrow" data-i18n="connectionEyebrow">CAUSE → EVENT → CONSEQUENCE</div><h2 class="section-title" data-i18n="connectionTitle">複数の力が重なって、歴史は動く</h2><div id="causeGrid" class="cause-grid"></div><div class="convergence" id="convergence"></div><div id="outcomeGrid" class="outcome-grid"></div><div class="connection-map-shell"><div class="section-head-inline"><h3 data-i18n="connectionMap">つながりマップ</h3><button class="small-action" data-action="graph-expand" data-i18n="expand">拡大</button></div><div id="connectionGraph" class="connection-graph"></div></div></section>
+      <section class="event-panel" data-event-panel="world"><div class="eyebrow" data-i18n="sameMoment">AT THE SAME MOMENT</div><h2 class="section-title" data-i18n="worldTitle">同じ時代の世界を横断する</h2><div class="world-map-card event-map-card"><svg id="eventWorldMap" class="world-map" viewBox="0 0 960 500"></svg></div><div id="sameTimeGrid" class="same-time-grid"></div></section>
+      <section class="event-panel" data-event-panel="meaning"><div class="meaning-switch" id="meaningSwitch"><button class="meaning-tab active" data-meaning="deep" data-i18n="deepDive">DEEP DIVE</button><button class="meaning-tab" data-meaning="echoes" data-i18n="echoes">ECHOES</button><button class="meaning-tab" data-meaning="sapiens" data-i18n="sapiens">SAPIENS</button></div><div id="meaningContent"></div></section>
+      <section class="understanding-section"><div class="eyebrow">UNDERSTANDING</div><h2 class="section-title" data-i18n="testTitle">自分の言葉で、歴史を説明する</h2><p class="page-copy" data-i18n="testCopy">年号ではなく、因果関係を自分の言葉で説明してください。</p><div class="test-shell"><div id="testQuestion" class="test-question"></div><textarea id="testAnswer" class="test-answer" rows="6" data-i18n-placeholder="testPlaceholder" placeholder="ここに自分の言葉で書く"></textarea><button class="primary-action" data-action="submit-test"><span data-i18n="submitTest">理解を確かめる</span><span>→</span></button><div id="testFeedback" class="test-feedback" hidden></div></div></section>
+      <section class="evidence-section"><button class="evidence-toggle pressable-row" data-action="toggle-evidence"><span><span class="eyebrow">SOURCES & EVIDENCE</span><strong data-i18n="evidenceTitle">史実・解釈・不確実性を分けて見る</strong></span><span>＋</span></button><div id="evidenceBody" class="evidence-body" hidden></div></section>
+    </div></section>
+
+    <section class="screen" data-screen="library" id="libraryScreen"><div class="page-pad top-space"><div class="eyebrow">LIBRARY</div><h1 class="page-title" data-i18n="libraryTitle">人類史の索引</h1><p class="page-copy" data-i18n="libraryCopy">人物・国家・宗教・思想・技術・環境から、気になる入口を探します。</p><div id="libraryFilters" class="library-filters"></div><div id="libraryGrid" class="library-grid"></div></div></section>
+    <section class="screen" data-screen="map" id="mapScreen"><div class="page-pad top-space map-page"><div class="eyebrow">MY MAP</div><h1 class="page-title" data-i18n="myMapTitle">自分の世界史</h1><p class="page-copy" data-i18n="myMapCopy">理解するほど、世界と時代の霧が晴れていきます。</p><div class="understanding-summary"><div class="score-ring"><strong id="scorePercent">18%</strong><small data-i18n="understanding">理解したつながり</small></div><div class="score-copy"><strong data-i18n="scoreTitle">説明できるテーマ 9 / 50</strong><p data-i18n="scoreCopy">読んだ数ではなく、自分の言葉で因果を説明できたテーマを数えます。</p></div></div><div class="world-map-card fog-map"><svg id="learningWorldMap" class="world-map" viewBox="0 0 960 500"></svg><div class="fog-layer"></div></div><div class="map-insight no-border-card" id="mapInsight"></div><div id="regionProgress" class="region-progress"></div></div></section>
+    <section class="screen" data-screen="profile" id="profileScreen"><div class="page-pad top-space"><div class="eyebrow">PROFILE</div><h1 class="page-title" data-i18n="settings">設定</h1><section class="settings-group no-border-card"><h2 data-i18n="language">言語</h2><div class="segmented"><button class="segmented-action" data-language-choice="ja">日本語</button><button class="segmented-action" data-language-choice="ru">Русский</button></div></section><section class="settings-group no-border-card"><h2 data-i18n="theme">表示テーマ</h2><div class="segmented"><button class="segmented-action" data-theme-choice="dark">Dark Museum</button><button class="segmented-action" data-theme-choice="light">Ivory Gallery</button></div></section><section class="settings-group no-border-card"><h2 data-i18n="depth">学習の深さ</h2><p data-i18n="depthCopy">回答の理解度に合わせて、問いと関連づけの深さを自動で変えます。</p><div class="segmented"><button class="segmented-action active" data-depth="auto" data-i18n="auto">自動</button><button class="segmented-action" data-depth="expert" data-i18n="expert">専門</button></div></section></div></section>
+  </main>
+
+  <nav class="bottom-nav" id="bottomNav"><button data-route="home" class="nav-action active"><svg viewBox="0 0 24 24"><path d="M4 10.5 12 4l8 6.5V20H4Z"/></svg><span data-i18n="navHome">HOME</span></button><button data-route="timeline" class="nav-action"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg><span data-i18n="navTimeline">TIMELINE</span></button><button data-route="library" class="nav-action"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5zM9 4v16M12 8h4M12 12h4M12 16h4"/></svg><span data-i18n="navLibrary">LIBRARY</span></button><button data-route="map" class="nav-action"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg><span data-i18n="navMap">MY MAP</span></button><button data-route="profile" class="nav-action"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5.5 20c.6-4 2.8-6 6.5-6s5.9 2 6.5 6"/></svg><span data-i18n="navProfile">PROFILE</span></button></nav>
+  <div id="searchOverlay" class="overlay" hidden><div class="overlay-card search-card"><div class="search-head"><input id="searchInput" type="search" data-i18n-placeholder="searchPlaceholder" placeholder="人物・出来事・思想・技術を検索"><button class="bare-action" data-action="close-overlay">×</button></div><div id="searchResults" class="search-results"></div></div></div>
+  <div id="menuOverlay" class="sheet-backdrop" hidden><div class="bottom-sheet"><div class="sheet-handle"></div><button class="pressable-row" data-route="timeline"><span data-i18n="sheetTimeline">人類史の巻物を開く</span><span>→</span></button><button class="pressable-row" data-route="map"><span data-i18n="sheetMap">理解マップを見る</span><span>→</span></button><button class="pressable-row" data-route="profile"><span data-i18n="sheetSettings">言語・表示を設定</span><span>→</span></button><button class="pressable-row" data-action="close-menu"><span data-i18n="close">閉じる</span><span>×</span></button></div></div>
+  <div id="toast" class="toast" hidden></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+<script src="./data.js"></script>
+<script src="./app.js"></script>
+</body>
+</html>

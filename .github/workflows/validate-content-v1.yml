@@ -1,0 +1,44 @@
+name: Validate Content Graph v1
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'content-v1/**'
+      - 'content-v1-preview.*'
+      - '.github/workflows/validate-content-v1.yml'
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check preview JavaScript
+        run: node --check content-v1-preview.js
+      - name: Parse all JSON
+        run: |
+          node - <<'NODE'
+          const fs=require('fs'),path=require('path');
+          const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(x=>x.isDirectory()?walk(path.join(d,x.name)):[path.join(d,x.name)]);
+          for(const f of walk('content-v1').filter(f=>f.endsWith('.json'))){JSON.parse(fs.readFileSync(f,'utf8'));console.log('OK',f)}
+          NODE
+      - name: Check topic route and page IDs
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const index=JSON.parse(fs.readFileSync('content-v1/index.json','utf8'));
+          const topic=JSON.parse(fs.readFileSync('content-v1/topics/viking-age.json','utf8'));
+          const byId=new Map(index.pages.map(p=>[p.id,p]));
+          if(topic.route.length!==12) throw new Error('Expected 12 Viking pages');
+          for(const id of topic.route){
+            const meta=byId.get(id); if(!meta) throw new Error('Missing index entry '+id);
+            const p='content-v1/'+meta.path.replace(/^\.\//,'');
+            if(!fs.existsSync(p)) throw new Error('Missing file '+p);
+            const page=JSON.parse(fs.readFileSync(p,'utf8'));
+            if(page.id!==id) throw new Error('ID mismatch '+id);
+            for(const k of ['question','answer','story','period','domains','places','topics','concepts','timeline','image','sources','relations']) if(!(k in page)) throw new Error(id+' missing '+k);
+          }
+          console.log('Validated',topic.route.length,'pages');
+          NODE

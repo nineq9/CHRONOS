@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ja" data-theme="dark" data-lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#151613">
+  <title>CHRONOS — Content Graph Preview</title>
+  <link rel="stylesheet" href="./styles-v4.css">
+  <link rel="stylesheet" href="./content-v1-preview.css?v=1">
+</head>
+<body>
+  <main class="cg-shell">
+    <header class="cg-topbar">
+      <a href="./" class="cg-wordmark">CHRONOS</a>
+      <div class="cg-actions"><button id="cgLang" type="button">RU</button><a href="./topics-preview.html" aria-label="topics">×</a></div>
+    </header>
+    <section class="cg-topic-head">
+      <div class="eyebrow">CONTENT GRAPH V1</div>
+      <h1 id="cgTopicTitle">ヴァイキング時代</h1>
+      <p id="cgTopicSub">1ページ1つの問い。必要なページだけ読み込み、関連する知識へつながります。</p>
+      <div class="cg-progress"><span id="cgProgressText">1 / 12</span><div><i id="cgProgressBar"></i></div></div>
+      <button class="cg-list-toggle" id="cgListToggle" type="button"><span>全12ページを見る</span><b>＋</b></button>
+      <nav id="cgPageList" class="cg-page-list" hidden></nav>
+    </section>
+    <article id="cgArticle" class="cg-article" aria-live="polite"></article>
+  </main>
+  <div id="cgLayerOverlay" class="cg-layer-overlay" hidden>
+    <button class="cg-layer-backdrop" type="button" aria-label="close"></button>
+    <section class="cg-layer-sheet"><div class="cg-layer-handle"></div><header><small id="cgLayerKind"></small><h2 id="cgLayerTitle"></h2><button id="cgLayerClose" type="button">×</button></header><div id="cgLayerBody"></div></section>
+  </div>
+  <script src="./content-v1-preview.js?v=1"></script>
+</body>
+</html>

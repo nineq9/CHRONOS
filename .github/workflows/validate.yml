@@ -19,6 +19,7 @@ jobs:
           node --check logic-v2.js
           node --check timeline-v4.js
           node --check timeline-detail-v6.js
+          node --check media-depth-v1.js
           node --check ux-v6.js
           node --check polish-v5.js
       - name: Check required app assets
@@ -30,5 +31,6 @@ jobs:
           test -s ux-v6.css
           test -s data.js
           test -s content-v3.js
+          test -s media-depth-v1.js
           test -s timeline-detail-v6.js
           test -s ux-v6.js

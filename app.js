@@ -1,5 +1,5 @@
 (async()=>{
-  const V='20260818v7a';
+  const V='20260818v7b';
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
   try{localStorage.setItem('chronos-guide-v2','seen')}catch{}
   if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').then(r=>r.update()).catch(()=>{});navigator.serviceWorker.addEventListener('controllerchange',()=>{try{if(!sessionStorage.getItem('chronos-sw-reload')){sessionStorage.setItem('chronos-sw-reload','1');location.reload()}}catch{}})}
@@ -19,6 +19,7 @@
     await loadScript('./compat-v3.js',2).catch(err=>console.warn('CHRONOS optional polish skipped',err));
     await loadScript('./polish-v5.js',2).catch(err=>console.warn('CHRONOS media polish skipped',err));
     await loadScript('./ux-v7.js',3);
+    await loadScript('./ux-v7-fix.js',2);
   }catch(err){console.error('CHRONOS boot failed',err);document.body.innerHTML='<main style="padding:32px 22px;color:#f3ead8;background:#151613;min-height:100dvh;font-family:-apple-system"><h1 style="font-family:Georgia,serif;font-weight:500">CHRONOS</h1><p>表示に必要なデータを読み込めませんでした。再読み込みしてください。</p><button onclick="location.reload()" style="min-height:48px;border:0;border-radius:999px;padding:0 20px;background:#ead7b4;color:#29251e">再読み込み</button></main>'}
   }
 })();

@@ -11,14 +11,22 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Rebuild and syntax-check v2 logic
+      - name: Rebuild and syntax-check browser logic
         run: |
           cat logic-v2.part1.txt logic-v2.part2.txt > /tmp/chronos-v2.js
           node --check /tmp/chronos-v2.js
           node --check app.js
           node --check logic-v2.js
-      - name: Check required v2 files
+          node --check timeline-v4.js
+          node --check ux-v7.js
+          node --check polish-v5.js
+      - name: Check required app files
         run: |
           test -s ui-v2.html
           test -s styles-v2.css
+          test -s styles-v4.css
+          test -s polish-v5.css
+          test -s ux-v7.css
           test -s data.js
+          test -s content-v3.js
+          test -s ux-v7.js

@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "sources": {
+    "natmus-viking-age": {"type":"museum","title":"The Viking Age","publisher":"National Museum of Denmark","url":"https://en.natmus.dk/historical-knowledge/denmark/prehistoric-period-until-1050-ad/the-viking-age/"},
+    "natmus-viking-people": {"type":"museum","title":"The people of the Viking Age","publisher":"National Museum of Denmark","url":"https://en.natmus.dk/historical-knowledge/denmark/prehistoric-period-until-1050-ad/the-viking-age/the-people/"},
+    "natmus-christianity": {"type":"museum","title":"Christianity comes to Denmark","publisher":"National Museum of Denmark","url":"https://en.natmus.dk/historical-knowledge/denmark/prehistoric-period-until-1050-ad/the-viking-age/religion-magic-death-and-rituals/christianity-comes-to-denmark/"},
+    "vikingmuseum-skuldelev5": {"type":"museum","title":"Skuldelev 5","publisher":"Viking Ship Museum Roskilde","url":"https://www.vikingeskibsmuseet.dk/en/visit-the-museum/exhibitions/the-five-viking-ships/skuldelev-5"},
+    "englishheritage-vikings-england": {"type":"heritage","title":"What happened when the Vikings came to England?","publisher":"English Heritage","url":"https://www.english-heritage.org.uk/members-area/kids/saxons-vikings/vikings-in-england/"},
+    "ashmolean-danelaw": {"type":"museum","title":"The Danelaw","publisher":"Ashmolean Museum, University of Oxford","url":"https://anglosaxondiscovery.ashmus.ox.ac.uk/vikings/vikings-danelaw.html"},
+    "oxford-danegeld": {"type":"research","title":"Danegeld: the land tax in England, 991–1162","publisher":"Oxford University Research Archive","url":"https://ora.ox.ac.uk/objects/uuid%3A4662f8e7-64a9-4347-86f5-4636d27edf1b"},
+    "britishmuseum-angloviking-coin": {"type":"museum-object","title":"Anglo-Viking coin from York","publisher":"British Museum","url":"https://www.britishmuseum.org/collection/object/C_1838-0710-1295"},
+    "antiquity-viking-causes": {"type":"research","title":"What caused the Viking Age?","publisher":"Antiquity / Cambridge University Press","url":"https://www.cambridge.org/core/journals/antiquity/article/what-caused-the-viking-age/9AAD157E488AF39555B64D3529944D43"}
+  }
+}

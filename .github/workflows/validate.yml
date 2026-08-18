@@ -19,6 +19,7 @@ jobs:
           node --check logic-v2.js
           node --check timeline-v4.js
           node --check ux-v7.js
+          node --check ux-v7-fix.js
           node --check polish-v5.js
       - name: Check required app files
         run: |
@@ -27,6 +28,8 @@ jobs:
           test -s styles-v4.css
           test -s polish-v5.css
           test -s ux-v7.css
+          test -s ux-v7-fix.css
           test -s data.js
           test -s content-v3.js
           test -s ux-v7.js
+          test -s ux-v7-fix.js

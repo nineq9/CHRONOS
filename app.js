@@ -1,5 +1,5 @@
 (async()=>{
-  const V='20260818i';
+  const V='20260818j';
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
   if('serviceWorker' in navigator){
     navigator.serviceWorker.register('./sw.js').then(r=>r.update()).catch(()=>{});

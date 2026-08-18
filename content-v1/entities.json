@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "entities": {
+    "vikings": {"kind":"people-label","name":{"ja":"ヴァイキング","ru":"Викинги"}},
+    "scandinavia": {"kind":"region","name":{"ja":"スカンディナヴィア","ru":"Скандинавия"}},
+    "england": {"kind":"region","name":{"ja":"イングランド","ru":"Англия"}},
+    "danelaw": {"kind":"political-region","name":{"ja":"デーンロウ","ru":"Данелаг"}},
+    "longship": {"kind":"technology","name":{"ja":"ロングシップ","ru":"Длинный корабль"}},
+    "heathen-army": {"kind":"military-group","name":{"ja":"大異教軍","ru":"Великая языческая армия"}},
+    "harald-bluetooth": {"kind":"person","name":{"ja":"ハーラル青歯王","ru":"Харальд Синезубый"}},
+    "cnut": {"kind":"person","name":{"ja":"クヌート大王","ru":"Кнуд Великий"}},
+    "hedby": {"kind":"place","name":{"ja":"ヘーゼビュー","ru":"Хедебю"}},
+    "york": {"kind":"place","name":{"ja":"ヨーク","ru":"Йорк"}},
+    "constantinople": {"kind":"place","name":{"ja":"コンスタンティノープル","ru":"Константинополь"}},
+    "islamic-silver": {"kind":"trade-object","name":{"ja":"イスラーム銀貨","ru":"Исламское серебро"}}
+  }
+}

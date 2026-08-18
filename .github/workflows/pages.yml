@@ -18,6 +18,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Build browser runtime
+        shell: python
+        run: |
+          from pathlib import Path
+          code = Path('logic-v2.part1.txt').read_text() + Path('logic-v2.part2.txt').read_text()
+          code = code.replace('short(P(i))', 'short(D.TIMEPOINTS[i])')
+          code = code.replace("$('[data-action=\"guide\"]#x');", "$$('[data-action=\"guide\"]').forEach(b=>{if(b.closest('.settings-block'))b.textContent=t.guidebutton});")
+          code = code.replace("if(p){idx=Math.max(0,D.TIMEPOINTS.indexOf(p));st.s('chronos-point',p.id)}", "if(p){idx=Math.max(0,D.TIMEPOINTS.indexOf(p));st.s('chronos-point',p.id);const v=new Set(st.j('chronos-visited',[]));v.add(p.id);st.sj('chronos-visited',[...v])}")
+          Path('logic-runtime.js').write_text(code)
       - uses: actions/configure-pages@v5
         with:
           enablement: true

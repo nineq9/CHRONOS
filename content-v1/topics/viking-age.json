@@ -1,0 +1,27 @@
+{
+  "id": "viking-age",
+  "title": {"ja":"ヴァイキング時代","ru":"Эпоха викингов"},
+  "subtitle": {"ja":"海を越えた人々","ru":"Люди, пересекавшие моря"},
+  "period": {"start":793,"end":1066},
+  "hero": {"image_query":"Viking ship Oseberg museum","hook":{"ja":"北欧の農民たちは、なぜ突然ヨーロッパの海に現れたのか？","ru":"Почему жители Скандинавии внезапно появились на морях Европы?"}},
+  "route": [
+    "viking-01-who",
+    "viking-02-everyday-life",
+    "viking-03-why-sea",
+    "viking-04-longships",
+    "viking-05-raids-and-trade",
+    "viking-06-eastward",
+    "viking-07-north-atlantic",
+    "viking-08-religion",
+    "viking-09-women-slavery",
+    "viking-10-england",
+    "viking-11-state-formation",
+    "viking-12-legacy"
+  ],
+  "branches": [
+    {"from":"viking-04-longships","to":"maritime-technology","label":{"ja":"船の歴史へ","ru":"К истории кораблей"}},
+    {"from":"viking-06-eastward","to":"silk-road","label":{"ja":"ユーラシア交易へ","ru":"К торговле Евразии"}},
+    {"from":"viking-10-england","to":"medieval-england","label":{"ja":"中世イングランドへ","ru":"К средневековой Англии"}},
+    {"from":"viking-11-state-formation","to":"european-state-formation","label":{"ja":"ヨーロッパ国家形成へ","ru":"К формированию европейских государств"}}
+  ]
+}

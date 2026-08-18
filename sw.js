@@ -1,5 +1,5 @@
-const CACHE='chronos-v7-20260818a';
-const CORE=['./','./index.html','./data.js','./content-v3.js','./content-v3-extra.js','./media-depth-v1.js','./lesson-french-v2.js','./app.js','./ui-v2.html','./styles-v4.css','./polish-v5.css','./ux-v7.css','./styles-v3.css','./styles-v2.css','./logic-runtime.js','./timeline-v4.js','./compat-v3.js','./polish-v5.js','./ux-v7.js','./manifest.webmanifest','./icon.svg'];
+const CACHE='chronos-v7-20260818c';
+const CORE=['./','./index.html','./data.js','./content-v3.js','./content-v3-extra.js','./media-depth-v1.js','./lesson-french-v2.js','./app.js','./ui-v2.html','./styles-v4.css','./polish-v5.css','./ux-v7.css','./ux-v7-fix.css','./styles-v3.css','./styles-v2.css','./logic-runtime.js','./timeline-v4.js','./compat-v3.js','./polish-v5.js','./ux-v7.js','./ux-v7-fix.js','./manifest.webmanifest','./icon.svg'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(fetch(e.request).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy));return r}).catch(async()=>{const exact=await caches.match(e.request);if(exact)return exact;const url=new URL(e.request.url);url.search='';return await caches.match(url.toString())||await caches.match('./index.html')}))});

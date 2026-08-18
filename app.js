@@ -1,5 +1,5 @@
 (async()=>{
-  const V='20260818v7b';
+  const V='20260818v7c';
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
   try{localStorage.setItem('chronos-guide-v2','seen')}catch{}
   if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').then(r=>r.update()).catch(()=>{});navigator.serviceWorker.addEventListener('controllerchange',()=>{try{if(!sessionStorage.getItem('chronos-sw-reload')){sessionStorage.setItem('chronos-sw-reload','1');location.reload()}}catch{}})}
@@ -9,6 +9,7 @@
   const link=document.createElement('link');link.rel='stylesheet';link.href=`./styles-v4.css?v=${V}`;document.head.appendChild(link);
   const polish=document.createElement('link');polish.rel='stylesheet';polish.href=`./polish-v5.css?v=${V}`;document.head.appendChild(polish);
   const ux=document.createElement('link');ux.rel='stylesheet';ux.href=`./ux-v7.css?v=${V}`;document.head.appendChild(ux);
+  const uxFix=document.createElement('link');uxFix.rel='stylesheet';uxFix.href=`./ux-v7-fix.css?v=${V}`;document.head.appendChild(uxFix);
   try{
     const html=await fetchText('./ui-v2.html');document.body.innerHTML=html;
     await Promise.allSettled([loadScript('./content-v3.js'),loadScript('./content-v3-extra.js')]);

@@ -1,9 +1,24 @@
 (async()=>{
-  const V='20260818q';
+  const V='20260818r';
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+  try{localStorage.setItem('chronos-guide-v2','seen')}catch{}
   if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').then(r=>r.update()).catch(()=>{});navigator.serviceWorker.addEventListener('controllerchange',()=>{try{if(!sessionStorage.getItem('chronos-sw-reload')){sessionStorage.setItem('chronos-sw-reload','1');location.reload()}}catch{}})}
   const loadScript=async(src,retries=3)=>{let last;for(let i=0;i<=retries;i++){try{await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=`${src}?v=${V}`;s.onload=resolve;s.onerror=()=>{s.remove();reject(new Error(src))};document.head.appendChild(s)});return}catch(e){last=e;if(i<retries)await sleep(250*(i+1))}}throw last};
   const fetchText=async(url,retries=3)=>{let last;for(let i=0;i<=retries;i++){try{const r=await fetch(`${url}?v=${V}`,{cache:'no-store'});if(!r.ok)throw new Error(`${url}:${r.status}`);return await r.text()}catch(e){last=e;if(i<retries)await sleep(250*(i+1))}}try{const cached=await caches.match(url);if(cached)return await cached.text()}catch{}throw last};
-  document.querySelector('link[href$="styles.css"]')?.remove();const link=document.createElement('link');link.rel='stylesheet';link.href=`./styles-v4.css?v=${V}`;document.head.appendChild(link);const polish=document.createElement('link');polish.rel='stylesheet';polish.href=`./polish-v5.css?v=${V}`;document.head.appendChild(polish);
-  try{const html=await fetchText('./ui-v2.html');document.body.innerHTML=html;await Promise.allSettled([loadScript('./content-v3.js'),loadScript('./content-v3-extra.js')]);await loadScript('./media-depth-v1.js',3);await loadScript('./lesson-french-v2.js',3);await loadScript('./logic-runtime.js',4);await loadScript('./timeline-v4.js',3);await loadScript('./compat-v3.js',2).catch(err=>console.warn('CHRONOS optional polish skipped',err));loadScript('./polish-v5.js',2).catch(err=>console.warn('CHRONOS media polish skipped',err))}catch(err){console.error('CHRONOS boot failed',err);document.body.innerHTML='<main style="padding:32px 22px;color:#f3ead8;background:#151613;min-height:100dvh;font-family:-apple-system"><h1 style="font-family:Georgia,serif;font-weight:500">CHRONOS</h1><p>表示に必要なデータを読み込めませんでした。再読み込みしてください。</p><button onclick="location.reload()" style="min-height:48px;border:0;border-radius:999px;padding:0 20px;background:#ead7b4;color:#29251e">再読み込み</button></main>'}
+  document.querySelector('link[href$="styles.css"]')?.remove();
+  const link=document.createElement('link');link.rel='stylesheet';link.href=`./styles-v4.css?v=${V}`;document.head.appendChild(link);
+  const polish=document.createElement('link');polish.rel='stylesheet';polish.href=`./polish-v5.css?v=${V}`;document.head.appendChild(polish);
+  const ux=document.createElement('link');ux.rel='stylesheet';ux.href=`./ux-v6.css?v=${V}`;document.head.appendChild(ux);
+  try{
+    const html=await fetchText('./ui-v2.html');document.body.innerHTML=html;
+    await Promise.allSettled([loadScript('./content-v3.js'),loadScript('./content-v3-extra.js')]);
+    await loadScript('./media-depth-v1.js',3);
+    await loadScript('./lesson-french-v2.js',3);
+    await loadScript('./timeline-detail-v6.js',3);
+    await loadScript('./logic-runtime.js',4);
+    await loadScript('./timeline-v4.js',3);
+    await loadScript('./compat-v3.js',2).catch(err=>console.warn('CHRONOS optional polish skipped',err));
+    await loadScript('./polish-v5.js',2).catch(err=>console.warn('CHRONOS media polish skipped',err));
+    await loadScript('./ux-v6.js',3);
+  }catch(err){console.error('CHRONOS boot failed',err);document.body.innerHTML='<main style="padding:32px 22px;color:#f3ead8;background:#151613;min-height:100dvh;font-family:-apple-system"><h1 style="font-family:Georgia,serif;font-weight:500">CHRONOS</h1><p>表示に必要なデータを読み込めませんでした。再読み込みしてください。</p><button onclick="location.reload()" style="min-height:48px;border:0;border-radius:999px;padding:0 20px;background:#ead7b4;color:#29251e">再読み込み</button></main>'}
 })();

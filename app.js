@@ -1,5 +1,5 @@
 (async()=>{
-  const V='20260818r';
+  const V='20260818s';
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
   try{localStorage.setItem('chronos-guide-v2','seen')}catch{}
   if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').then(r=>r.update()).catch(()=>{});navigator.serviceWorker.addEventListener('controllerchange',()=>{try{if(!sessionStorage.getItem('chronos-sw-reload')){sessionStorage.setItem('chronos-sw-reload','1');location.reload()}}catch{}})}

@@ -1,5 +1,5 @@
 (async()=>{
-  const V='20260818h2';
+  const V='20260818i';
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
   if('serviceWorker' in navigator){
     navigator.serviceWorker.register('./sw.js').then(r=>r.update()).catch(()=>{});
@@ -8,12 +8,13 @@
   const loadScript=async(src,retries=3)=>{let last;for(let i=0;i<=retries;i++){try{await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=`${src}?v=${V}`;s.onload=resolve;s.onerror=()=>{s.remove();reject(new Error(src))};document.head.appendChild(s)});return}catch(e){last=e;if(i<retries)await sleep(250*(i+1))}}throw last};
   const fetchText=async(url,retries=3)=>{let last;for(let i=0;i<=retries;i++){try{const r=await fetch(`${url}?v=${V}`,{cache:'no-store'});if(!r.ok)throw new Error(`${url}:${r.status}`);return await r.text()}catch(e){last=e;if(i<retries)await sleep(250*(i+1))}}try{const cached=await caches.match(url);if(cached)return await cached.text()}catch{}throw last};
   document.querySelector('link[href$="styles.css"]')?.remove();
-  const link=document.createElement('link');link.rel='stylesheet';link.href=`./styles-v3.css?v=${V}`;document.head.appendChild(link);
+  const link=document.createElement('link');link.rel='stylesheet';link.href=`./styles-v4.css?v=${V}`;document.head.appendChild(link);
   try{
     const html=await fetchText('./ui-v2.html');
     document.body.innerHTML=html;
     await Promise.allSettled([loadScript('./content-v3.js'),loadScript('./content-v3-extra.js')]);
     await loadScript('./logic-runtime.js',4);
+    await loadScript('./timeline-v4.js',3);
     loadScript('./compat-v3.js',2).catch(err=>console.warn('CHRONOS optional polish skipped',err));
   }catch(err){
     console.error('CHRONOS boot failed',err);

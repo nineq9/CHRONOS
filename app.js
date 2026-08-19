@@ -1,5 +1,5 @@
 (async()=>{
-  const V='20260819c';
+  const V='20260819d';
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
   if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').then(r=>r.update()).catch(()=>{});navigator.serviceWorker.addEventListener('controllerchange',()=>{try{if(!sessionStorage.getItem('chronos-sw-reload')){sessionStorage.setItem('chronos-sw-reload','1');location.reload()}}catch{}})}
   const loadScript=async(src,retries=3)=>{let last;for(let i=0;i<=retries;i++){try{await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=`${src}?v=${V}`;s.onload=resolve;s.onerror=()=>{s.remove();reject(new Error(src))};document.head.appendChild(s)});return}catch(e){last=e;if(i<retries)await sleep(250*(i+1))}}throw last};
@@ -21,6 +21,9 @@
     await loadScript('./compat-v3.js',2).catch(err=>console.warn('CHRONOS optional polish skipped',err));
     await loadScript('./experience-v1.js',2);
     document.addEventListener('click',e=>{const x=e.target.closest('[data-x-route]');if(x?.dataset.xRoute)setTimeout(()=>history.replaceState(null,'',`#x-${x.dataset.xRoute}`),0)},true);
+    const menu=document.querySelector('#menuOverlay .menu-sheet');
+    if(menu&&!document.querySelector('#xMenuLibrary')){const mapButton=menu.querySelector('[data-route="map"]');mapButton?.insertAdjacentHTML('beforebegin','<button id="xMenuLibrary" data-route="library"><span>LIBRARY</span><span>→</span></button>')}
+    const xMatch=(location.hash||'').match(/^#x-(explore|mission)$/);if(xMatch)document.querySelector(`#bottomNav [data-x-route="${xMatch[1]}"]`)?.click();
     loadScript('./polish-v5.js',2).catch(err=>console.warn('CHRONOS media polish skipped',err));
   }catch(err){
     console.error('CHRONOS boot failed',err);

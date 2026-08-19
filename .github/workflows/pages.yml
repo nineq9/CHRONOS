@@ -18,6 +18,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
       - name: Build browser runtime
         shell: python
         run: |
@@ -27,6 +30,11 @@ jobs:
           code = code.replace("$('[data-action=\"guide\"]#x');", "$$('[data-action=\"guide\"]').forEach(b=>{if(b.closest('.settings-block'))b.textContent=t.guidebutton});")
           code = code.replace("if(p){idx=Math.max(0,D.TIMEPOINTS.indexOf(p));st.s('chronos-point',p.id)}", "if(p){idx=Math.max(0,D.TIMEPOINTS.indexOf(p));st.s('chronos-point',p.id);const v=new Set(st.j('chronos-visited',[]));v.add(p.id);st.sj('chronos-visited',[...v])}")
           Path('logic-runtime.js').write_text(code)
+      - name: Validate browser scripts
+        run: |
+          node --check app.js
+          node --check logic-runtime.js
+          node --check experience-v1.js
       - uses: actions/configure-pages@v5
         with:
           enablement: true

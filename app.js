@@ -1,9 +1,9 @@
 (async()=>{
-  const V='20260819d';
+  const V='20260819-preview1';
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-  if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').then(r=>r.update()).catch(()=>{});navigator.serviceWorker.addEventListener('controllerchange',()=>{try{if(!sessionStorage.getItem('chronos-sw-reload')){sessionStorage.setItem('chronos-sw-reload','1');location.reload()}}catch{}})}
+  if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').then(r=>r.update()).catch(()=>{})}
   const loadScript=async(src,retries=3)=>{let last;for(let i=0;i<=retries;i++){try{await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=`${src}?v=${V}`;s.onload=resolve;s.onerror=()=>{s.remove();reject(new Error(src))};document.head.appendChild(s)});return}catch(e){last=e;if(i<retries)await sleep(250*(i+1))}}throw last};
-  const fetchText=async(url,retries=3)=>{let last;for(let i=0;i<=retries;i++){try{const r=await fetch(`${url}?v=${V}`,{cache:'no-store'});if(!r.ok)throw new Error(`${url}:${r.status}`);return await r.text()}catch(e){last=e;if(i<retries)await sleep(250*(i+1))}}try{const cached=await caches.match(url);if(cached)return await cached.text()}catch{}throw last};
+  const fetchText=async(url,retries=3)=>{let last;for(let i=0;i<=retries;i++){try{const r=await fetch(`${url}?v=${V}`,{cache:'no-store'});if(!r.ok)throw new Error(`${url}:${r.status}`);return await r.text()}catch(e){last=e;if(i<retries)await sleep(250*(i+1))}}throw last};
   const waitFor=async(fn,timeout=5000)=>{const start=Date.now();while(Date.now()-start<timeout){if(fn())return true;await sleep(50)}return false};
   document.querySelector('link[href$="styles.css"]')?.remove();
   const link=document.createElement('link');link.rel='stylesheet';link.href=`./styles-v4.css?v=${V}`;document.head.appendChild(link);
@@ -15,7 +15,7 @@
     await Promise.allSettled([loadScript('./content-v3.js'),loadScript('./content-v3-extra.js')]);
     await loadScript('./media-depth-v1.js',3);
     await loadScript('./lesson-french-v2.js',3);
-    await loadScript('./logic-runtime.js',4);
+    await loadScript('./logic-v2.js',4);
     await waitFor(()=>document.querySelector('#dialTicks')?.children.length>0);
     await loadScript('./timeline-v4.js',3);
     await loadScript('./compat-v3.js',2).catch(err=>console.warn('CHRONOS optional polish skipped',err));
@@ -27,6 +27,6 @@
     loadScript('./polish-v5.js',2).catch(err=>console.warn('CHRONOS media polish skipped',err));
   }catch(err){
     console.error('CHRONOS boot failed',err);
-    document.body.innerHTML='<main style="padding:32px 22px;color:#f3ead8;background:#151613;min-height:100dvh;font-family:-apple-system"><h1 style="font-family:Georgia,serif;font-weight:500">CHRONOS</h1><p>表示に必要なデータを読み込めませんでした。再読み込みしてください。</p><button onclick="location.reload()" style="min-height:48px;border:0;border-radius:999px;padding:0 20px;background:#ead7b4;color:#29251e">再読み込み</button></main>'
+    document.body.innerHTML='<main style="padding:32px 22px;color:#f3ead8;background:#151613;min-height:100dvh;font-family:-apple-system"><h1 style="font-family:Georgia,serif;font-weight:500">CHRONOS PREVIEW</h1><p>プレビューを読み込めませんでした。再読み込みしてください。</p><button onclick="location.reload()" style="min-height:48px;border:0;border-radius:999px;padding:0 20px;background:#ead7b4;color:#29251e">再読み込み</button></main>'
   }
 })();

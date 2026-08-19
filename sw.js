@@ -1,4 +1,4 @@
-const CACHE='chronos-v6-20260819c';
+const CACHE='chronos-v6-20260819d';
 const CORE=['./','./index.html','./data.js','./content-v3.js','./content-v3-extra.js','./media-depth-v1.js','./lesson-french-v2.js','./app.js','./ui-v2.html','./styles-v4.css','./polish-v5.css','./styles-v3.css','./styles-v2.css','./logic-runtime.js','./timeline-v4.js','./compat-v3.js','./polish-v5.js','./experience-v1.js','./experience-v1.css','./manifest.webmanifest','./icon.svg'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));

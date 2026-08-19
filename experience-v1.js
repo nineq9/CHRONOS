@@ -27,131 +27,30 @@ const copy={
  }
 };
 const C=()=>copy[lang()];
-
 function persist(){localStorage.setItem('chronos-explore-visited',JSON.stringify([...state.visited]));localStorage.setItem('chronos-mission-done',JSON.stringify([...state.missionDone]));}
 async function json(url){const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw new Error(`${url}: ${r.status}`);return r.json();}
-async function ensureData(){
- if(state.index&&state.topic)return;
- [state.index,state.topic]=await Promise.all([json('./content-v1/index.json'),json('./content-v1/topics/viking-age.json')]);
-}
+async function ensureData(){if(state.index&&state.topic)return;[state.index,state.topic]=await Promise.all([json('./content-v1/index.json'),json('./content-v1/topics/viking-age.json')]);}
 function pageMeta(id){return state.index?.pages?.find(p=>p.id===id);}
 function pagePath(id){const p=pageMeta(id);return p?'./content-v1/'+p.path.replace(/^\.\//,''):null;}
-
 function injectShell(){
- const main=qs('#app main'); if(!main||qs('#exploreScreen'))return;
- main.insertAdjacentHTML('beforeend',`
-  <section class="screen x-screen" data-screen="explore-x" id="exploreScreen"><div class="page-pad top-space x-page"><div id="exploreRoot"></div></div></section>
-  <section class="screen x-screen" data-screen="mission-x" id="missionScreen"><div class="page-pad top-space x-page"><div id="missionRoot"></div></div></section>`);
- const home=qs('.home-after');
- if(home&&!qs('#xStartHere')) home.insertAdjacentHTML('afterbegin',`<section class="home-section x-start" id="xStartHere"></section>`);
- const nav=qs('#bottomNav');
- if(nav){nav.innerHTML=`
-  <button class="nav-button active" data-route="home"><svg viewBox="0 0 24 24"><path d="m4 10 8-6 8 6v9H4z"/></svg><span>HOME</span></button>
-  <button class="nav-button" data-x-route="explore"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="m15.5 8.5-2.2 4.8-4.8 2.2 2.2-4.8z"/></svg><span>EXPLORE</span></button>
-  <button class="nav-button" data-route="timeline"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg><span>TIMELINE</span></button>
-  <button class="nav-button" data-x-route="mission"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg><span>MISSION</span></button>`;}
- const menu=qs('#menuOverlay .menu-sheet');
- if(menu&&!qs('#xMenuExplore')){
-  const anchor=menu.querySelector('button');
-  anchor?.insertAdjacentHTML('beforebegin',`<button id="xMenuExplore" data-x-route="explore"><span>EXPLORE</span><span>→</span></button><button data-x-route="mission"><span>MISSION</span><span>→</span></button>`);
- }
+ const main=qs('#app main');if(!main||qs('#exploreScreen'))return;
+ main.insertAdjacentHTML('beforeend',`<section class="screen x-screen" data-screen="explore-x" id="exploreScreen"><div class="page-pad top-space x-page"><div id="exploreRoot"></div></div></section><section class="screen x-screen" data-screen="mission-x" id="missionScreen"><div class="page-pad top-space x-page"><div id="missionRoot"></div></div></section>`);
+ const home=qs('.home-after');if(home&&!qs('#xStartHere'))home.insertAdjacentHTML('afterbegin',`<section class="home-section x-start" id="xStartHere"></section>`);
+ const nav=qs('#bottomNav');if(nav){nav.innerHTML=`<button class="nav-button active" data-route="home"><svg viewBox="0 0 24 24"><path d="m4 10 8-6 8 6v9H4z"/></svg><span id="navHome">HOME</span></button><button class="nav-button" data-x-route="explore"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="m15.5 8.5-2.2 4.8-4.8 2.2 2.2-4.8z"/></svg><span>EXPLORE</span></button><button class="nav-button" data-route="timeline"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg><span id="navTimeline">TIMELINE</span></button><button class="nav-button" data-x-route="mission"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg><span>MISSION</span></button><span id="navLibrary" hidden></span><span id="navMap" hidden></span><span id="navProfile" hidden></span>`;}
+ const menu=qs('#menuOverlay .menu-sheet');if(menu&&!qs('#xMenuExplore')){const anchor=menu.querySelector('button');anchor?.insertAdjacentHTML('beforebegin',`<button id="xMenuExplore" data-x-route="explore"><span>EXPLORE</span><span>→</span></button><button data-x-route="mission"><span>MISSION</span><span>→</span></button>`);}
 }
-
-function renderHomeStart(){
- const root=qs('#xStartHere'); if(!root)return;
- const c=C();
- root.innerHTML=`<div class="eyebrow">${c.startHere}</div><h2 class="section-title">${c.startHereTitle}</h2><div class="x-home-grid">
-  <button class="x-home-entry x-home-entry-main pressable" data-x-route="explore"><small>EXPLORE</small><strong>${c.startExplore}</strong><span>→</span></button>
-  <button class="x-home-entry pressable" data-x-route="mission"><small>MISSION</small><strong>${c.startMission}</strong><span>→</span></button>
-  <button class="x-home-entry x-home-map pressable" data-route="map"><small>YOUR HISTORY</small><strong>${c.myMap}</strong><span>→</span></button>
- </div>`;
-}
-
-function showX(name){
- qsa('.screen').forEach(s=>s.classList.remove('active'));
- const screen=name==='mission'?qs('#missionScreen'):qs('#exploreScreen');
- screen?.classList.add('active');
- const top=qs('#topbar'); if(top)top.hidden=false;
- qsa('#bottomNav .nav-button').forEach(b=>b.classList.toggle('active',b.dataset.xRoute===name));
- qs('#searchOverlay')&&(qs('#searchOverlay').hidden=true); qs('#menuOverlay')&&(qs('#menuOverlay').hidden=true);
- window.scrollTo({top:0,behavior:'instant'});
- if(name==='mission')renderMission(); else renderExplore();
-}
-
-async function renderExplore(){
- const root=qs('#exploreRoot'); if(!root)return;
- const c=C();
- try{await ensureData();}catch(e){root.innerHTML='<p class="page-copy">Content data could not be loaded.</p>';return;}
- const done=state.topic.route.filter(id=>state.visited.has(id)).length;
- root.innerHTML=`<div class="eyebrow">${c.explore}</div><h1 class="page-title">${c.exploreTitle}</h1><p class="page-copy">${c.exploreCopy}</p>
- <section class="x-topic-hero"><div class="x-topic-orbit" aria-hidden="true"><i></i><i></i><i></i></div><div class="x-topic-copy"><small>${c.featured}</small><h2>${esc(t(state.topic.title))}</h2><p>${esc(t(state.topic.hero?.hook))}</p><div class="x-topic-progress"><span>${done} / ${state.topic.route.length} ${c.learned}</span><b><i style="width:${(done/state.topic.route.length)*100}%"></i></b></div></div></section>
- <div class="x-topic-head"><span>${c.pages}</span><strong>${esc(t(state.topic.subtitle))}</strong></div>
- <div class="x-topic-list">${state.topic.route.map((id,i)=>{const p=pageMeta(id);return `<button data-x-page="${id}" class="${state.visited.has(id)?'visited':''}"><small>${String(i+1).padStart(2,'0')}</small><strong>${esc(t(p?.title))}</strong><i></i><span>→</span></button>`}).join('')}</div>`;
-}
-
-async function openPage(id){
- await ensureData(); const path=pagePath(id); if(!path)return;
- const p=await json(path); state.current=p; state.visited.add(id); if(['viking-02-everyday-life','viking-03-why-sea','viking-05-raids-and-trade'].includes(id))state.missionDone.add(id); persist();
- const root=qs('#exploreRoot'),c=C(),next=p.next&&pageMeta(p.next);
- root.innerHTML=`<button class="text-link x-back" data-x-back-topic>← <span>${c.backTopic}</span></button>
- <article class="x-reading">
-  <div class="x-reading-meta">${esc(t(p.period?.label))}</div>
-  <div class="x-reading-question-label">${c.question}</div><h1>${esc(t(p.title))}</h1><p class="x-reading-question">${esc(t(p.question))}</p>
-  <section class="x-reading-answer"><small>${c.answer}</small><p>${esc(t(p.answer))}</p></section>
-  <div class="x-reading-story">${(t(p.story)||[]).map(x=>`<p>${esc(x)}</p>`).join('')}</div>
-  ${p.evidence?`<section class="x-reading-evidence"><h2>${c.evidence}</h2><ul>${(t(p.evidence)||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>`:''}
-  ${p.so_what?`<section class="x-reading-so"><h2>${c.soWhat}</h2><p>${esc(t(p.so_what))}</p></section>`:''}
-  ${next?`<button class="x-next" data-x-page="${p.next}"><span><small>${c.next}</small><strong>${esc(t(next.title))}</strong></span><b>→</b></button>`:''}
- </article>`;
- renderMission(false);
- window.scrollTo({top:0,behavior:'instant'});
-}
-
-function missionItems(){
- return [
-  {id:'viking-02-everyday-life',label:{ja:'北欧社会の暮らしを知る',ru:'Понять повседневную жизнь Скандинавии'}},
-  {id:'viking-03-why-sea',label:{ja:'なぜ海へ出たのかを調べる',ru:'Исследовать причины выхода в море'}},
-  {id:'viking-05-raids-and-trade',label:{ja:'略奪と交易の関係を見る',ru:'Сравнить набеги и торговлю'}}
- ];
-}
-function renderMission(scroll=true){
- const root=qs('#missionRoot'); if(!root)return; const c=C(),items=missionItems(),done=items.filter(x=>state.missionDone.has(x.id)).length,unlock=done===items.length;
- root.innerHTML=`<div class="eyebrow">${c.mission}</div><h1 class="page-title">${c.missionTitle}</h1><p class="page-copy">${c.missionCopy}</p>
- <section class="x-mission-card"><div class="x-mission-top"><small>${c.missionKicker}</small><span>${done} / ${items.length}</span></div><h2>${c.missionQ}</h2><p>${c.missionIntro}</p><div class="x-mission-progress"><i style="width:${done/items.length*100}%"></i></div>
- <div class="x-clues">${items.map((x,i)=>{const yes=state.missionDone.has(x.id);return `<button data-x-page="${x.id}" class="${yes?'done':''}"><small>${c.clue} ${i+1}</small><strong>${esc(t(x.label))}</strong><span>${yes?c.done:c.investigate} →</span></button>`}).join('')}</div></section>
- <section class="x-final ${unlock?'unlocked':'locked'}"><div class="x-final-head"><div><small>${c.final}</small><h2>${unlock?c.finalQ:c.locked}</h2></div><span>${unlock?'◎':'○'}</span></div>${unlock?`<textarea id="xMissionAnswer" rows="6" placeholder="${c.placeholder}"></textarea><button class="primary-button" data-x-submit-mission><span>${c.submit}</span><span>→</span></button><div id="xMissionFeedback" class="x-feedback" hidden></div>`:''}</section>
- <section class="x-next-mission"><small>${c.coming}</small><h2>${c.comingTitle}</h2><p>${c.comingCopy}</p></section>`;
- if(scroll)window.scrollTo({top:0,behavior:'instant'});
-}
-function submitMission(){
- const a=qs('#xMissionAnswer')?.value.trim()||'',fb=qs('#xMissionFeedback'),c=C(); if(!fb)return;
- const strong=a.length>=70&&(/船|海|交易|農|人口|技術|ship|sea|trade|торг|кораб|мор/i.test(a));
- fb.hidden=false; fb.innerHTML=`<strong>${strong?'MISSION COMPLETE':'KEEP EXPLORING'}</strong><p>${strong?c.feedbackGood:c.feedbackShort}</p>`;
- if(strong){const mastered=new Set(JSON.parse(localStorage.getItem('chronos-mastered')||'[]'));mastered.add('viking-age');localStorage.setItem('chronos-mastered',JSON.stringify([...mastered]));}
-}
-
-function syncCustomNav(){
- const active=qs('.screen.active'); if(!active||active.classList.contains('x-screen'))return;
- qsa('#bottomNav .nav-button').forEach(b=>b.classList.toggle('active',b.dataset.route===active.dataset.screen));
-}
-function localize(){renderHomeStart(); if(qs('#exploreScreen')?.classList.contains('active'))renderExplore(); if(qs('#missionScreen')?.classList.contains('active'))renderMission(false);}
-
-function bind(){
- document.addEventListener('click',e=>{
-  const x=e.target.closest('[data-x-route],[data-x-page],[data-x-back-topic],[data-x-submit-mission]'); if(!x)return;
-  e.preventDefault(); e.stopPropagation();
-  if(x.dataset.xRoute){showX(x.dataset.xRoute);return;}
-  if(x.dataset.xPage){showX('explore');openPage(x.dataset.xPage).catch(console.error);return;}
-  if(x.hasAttribute('data-x-back-topic')){renderExplore();return;}
-  if(x.hasAttribute('data-x-submit-mission')){submitMission();return;}
- },true);
- window.addEventListener('hashchange',()=>setTimeout(syncCustomNav,0));
- const mo=new MutationObserver(ms=>{if(ms.some(m=>m.attributeName==='data-lang'))localize();});mo.observe(document.documentElement,{attributes:true,attributeFilter:['data-lang']});
-}
-
-async function init(){
- injectShell(); renderHomeStart(); bind();
- try{await ensureData(); renderExplore(); renderMission(false);}catch(e){console.warn('CHRONOS experience data unavailable',e);}
-}
+function renderHomeStart(){const root=qs('#xStartHere');if(!root)return;const c=C();root.innerHTML=`<div class="eyebrow">${c.startHere}</div><h2 class="section-title">${c.startHereTitle}</h2><div class="x-home-grid"><button class="x-home-entry x-home-entry-main pressable" data-x-route="explore"><small>EXPLORE</small><strong>${c.startExplore}</strong><span>→</span></button><button class="x-home-entry pressable" data-x-route="mission"><small>MISSION</small><strong>${c.startMission}</strong><span>→</span></button><button class="x-home-entry x-home-map pressable" data-route="map"><small>YOUR HISTORY</small><strong>${c.myMap}</strong><span>→</span></button></div>`;}
+function showX(name){qsa('.screen').forEach(s=>s.classList.remove('active'));const screen=name==='mission'?qs('#missionScreen'):qs('#exploreScreen');screen?.classList.add('active');const top=qs('#topbar');if(top)top.hidden=false;qsa('#bottomNav .nav-button').forEach(b=>b.classList.toggle('active',b.dataset.xRoute===name));qs('#searchOverlay')&&(qs('#searchOverlay').hidden=true);qs('#menuOverlay')&&(qs('#menuOverlay').hidden=true);window.scrollTo({top:0,behavior:'instant'});if(name==='mission')renderMission();else renderExplore();}
+async function renderExplore(){const root=qs('#exploreRoot');if(!root)return;const c=C();try{await ensureData();}catch(e){root.innerHTML='<p class="page-copy">Content data could not be loaded.</p>';return;}const done=state.topic.route.filter(id=>state.visited.has(id)).length;root.innerHTML=`<div class="eyebrow">${c.explore}</div><h1 class="page-title">${c.exploreTitle}</h1><p class="page-copy">${c.exploreCopy}</p><section class="x-topic-hero"><div class="x-topic-orbit" aria-hidden="true"><i></i><i></i><i></i></div><div class="x-topic-copy"><small>${c.featured}</small><h2>${esc(t(state.topic.title))}</h2><p>${esc(t(state.topic.hero?.hook))}</p><div class="x-topic-progress"><span>${done} / ${state.topic.route.length} ${c.learned}</span><b><i style="width:${(done/state.topic.route.length)*100}%"></i></b></div></div></section><div class="x-topic-head"><span>${c.pages}</span><strong>${esc(t(state.topic.subtitle))}</strong></div><div class="x-topic-list">${state.topic.route.map((id,i)=>{const p=pageMeta(id);return `<button data-x-page="${id}" class="${state.visited.has(id)?'visited':''}"><small>${String(i+1).padStart(2,'0')}</small><strong>${esc(t(p?.title))}</strong><i></i><span>→</span></button>`}).join('')}</div>`;}
+async function openPage(id){await ensureData();const path=pagePath(id);if(!path)return;const p=await json(path);state.current=p;state.visited.add(id);if(['viking-02-everyday-life','viking-03-why-sea','viking-05-raids-and-trade'].includes(id))state.missionDone.add(id);persist();const root=qs('#exploreRoot'),c=C(),next=p.next&&pageMeta(p.next);root.innerHTML=`<button class="text-link x-back" data-x-back-topic>← <span>${c.backTopic}</span></button><article class="x-reading"><div class="x-reading-meta">${esc(t(p.period?.label))}</div><div class="x-reading-question-label">${c.question}</div><h1>${esc(t(p.title))}</h1><p class="x-reading-question">${esc(t(p.question))}</p><section class="x-reading-answer"><small>${c.answer}</small><p>${esc(t(p.answer))}</p></section><div class="x-reading-story">${(t(p.story)||[]).map(x=>`<p>${esc(x)}</p>`).join('')}</div>${p.evidence?`<section class="x-reading-evidence"><h2>${c.evidence}</h2><ul>${(t(p.evidence)||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>`:''}${p.so_what?`<section class="x-reading-so"><h2>${c.soWhat}</h2><p>${esc(t(p.so_what))}</p></section>`:''}${next?`<button class="x-next" data-x-page="${p.next}"><span><small>${c.next}</small><strong>${esc(t(next.title))}</strong></span><b>→</b></button>`:''}</article>`;renderMission(false);window.scrollTo({top:0,behavior:'instant'});}
+function missionItems(){return[{id:'viking-02-everyday-life',label:{ja:'北欧社会の暮らしを知る',ru:'Понять повседневную жизнь Скандинавии'}},{id:'viking-03-why-sea',label:{ja:'なぜ海へ出たのかを調べる',ru:'Исследовать причины выхода в море'}},{id:'viking-05-raids-and-trade',label:{ja:'略奪と交易の関係を見る',ru:'Сравнить набеги и торговлю'}}];}
+function renderMission(scroll=true){const root=qs('#missionRoot');if(!root)return;const c=C(),items=missionItems(),done=items.filter(x=>state.missionDone.has(x.id)).length,unlock=done===items.length;root.innerHTML=`<div class="eyebrow">${c.mission}</div><h1 class="page-title">${c.missionTitle}</h1><p class="page-copy">${c.missionCopy}</p><section class="x-mission-card"><div class="x-mission-top"><small>${c.missionKicker}</small><span>${done} / ${items.length}</span></div><h2>${c.missionQ}</h2><p>${c.missionIntro}</p><div class="x-mission-progress"><i style="width:${done/items.length*100}%"></i></div><div class="x-clues">${items.map((x,i)=>{const yes=state.missionDone.has(x.id);return `<button data-x-page="${x.id}" class="${yes?'done':''}"><small>${c.clue} ${i+1}</small><strong>${esc(t(x.label))}</strong><span>${yes?c.done:c.investigate} →</span></button>`}).join('')}</div></section><section class="x-final ${unlock?'unlocked':'locked'}"><div class="x-final-head"><div><small>${c.final}</small><h2>${unlock?c.finalQ:c.locked}</h2></div><span>${unlock?'◎':'○'}</span></div>${unlock?`<textarea id="xMissionAnswer" rows="6" placeholder="${c.placeholder}"></textarea><button class="primary-button" data-x-submit-mission><span>${c.submit}</span><span>→</span></button><div id="xMissionFeedback" class="x-feedback" hidden></div>`:''}</section><section class="x-next-mission"><small>${c.coming}</small><h2>${c.comingTitle}</h2><p>${c.comingCopy}</p></section>`;if(scroll)window.scrollTo({top:0,behavior:'instant'});}
+function submitMission(){const a=qs('#xMissionAnswer')?.value.trim()||'',fb=qs('#xMissionFeedback'),c=C();if(!fb)return;const strong=a.length>=70&&(/船|海|交易|農|人口|技術|ship|sea|trade|торг|кораб|мор/i.test(a));fb.hidden=false;fb.innerHTML=`<strong>${strong?'MISSION COMPLETE':'KEEP EXPLORING'}</strong><p>${strong?c.feedbackGood:c.feedbackShort}</p>`;if(strong){const mastered=new Set(JSON.parse(localStorage.getItem('chronos-mastered')||'[]'));mastered.add('viking-age');localStorage.setItem('chronos-mastered',JSON.stringify([...mastered]));}}
+function syncCustomNav(){const active=qs('.screen.active');if(!active||active.classList.contains('x-screen'))return;qsa('#bottomNav .nav-button').forEach(b=>b.classList.toggle('active',b.dataset.route===active.dataset.screen));}
+function localize(){renderHomeStart();if(qs('#exploreScreen')?.classList.contains('active'))renderExplore();if(qs('#missionScreen')?.classList.contains('active'))renderMission(false);}
+function bind(){document.addEventListener('click',e=>{const x=e.target.closest('[data-x-route],[data-x-page],[data-x-back-topic],[data-x-submit-mission]');if(!x)return;e.preventDefault();e.stopPropagation();if(x.dataset.xRoute){showX(x.dataset.xRoute);return;}if(x.dataset.xPage){showX('explore');openPage(x.dataset.xPage).catch(console.error);return;}if(x.hasAttribute('data-x-back-topic')){renderExplore();return;}if(x.hasAttribute('data-x-submit-mission')){submitMission();return;}},true);window.addEventListener('hashchange',()=>setTimeout(syncCustomNav,0));const mo=new MutationObserver(ms=>{if(ms.some(m=>m.attributeName==='data-lang'))localize();});mo.observe(document.documentElement,{attributes:true,attributeFilter:['data-lang']});}
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+async function waitLegacy(){for(let i=0;i<100;i++){if(qs('#dialTicks')?.children.length)return;await wait(50);}}
+async function init(){await waitLegacy();injectShell();renderHomeStart();bind();try{await ensureData();renderExplore();renderMission(false);}catch(e){console.warn('CHRONOS experience data unavailable',e);}}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();

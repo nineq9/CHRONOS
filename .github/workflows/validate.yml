@@ -1,7 +1,7 @@
 name: Validate CHRONOS
 on:
   push:
-    branches: [main]
+    branches: [main, 'agent/explore-mission-v1']
   workflow_dispatch:
 jobs:
   validate:
@@ -17,8 +17,11 @@ jobs:
           node --check /tmp/chronos-v2.js
           node --check app.js
           node --check logic-v2.js
+          node --check experience-v1.js
       - name: Check required v2 files
         run: |
           test -s ui-v2.html
           test -s styles-v2.css
           test -s data.js
+          test -s experience-v1.js
+          test -s experience-v1.css

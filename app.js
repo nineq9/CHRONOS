@@ -1,5 +1,5 @@
 (async()=>{
-  const V='20260819b';
+  const V='20260819c';
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
   if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').then(r=>r.update()).catch(()=>{});navigator.serviceWorker.addEventListener('controllerchange',()=>{try{if(!sessionStorage.getItem('chronos-sw-reload')){sessionStorage.setItem('chronos-sw-reload','1');location.reload()}}catch{}})}
   const loadScript=async(src,retries=3)=>{let last;for(let i=0;i<=retries;i++){try{await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=`${src}?v=${V}`;s.onload=resolve;s.onerror=()=>{s.remove();reject(new Error(src))};document.head.appendChild(s)});return}catch(e){last=e;if(i<retries)await sleep(250*(i+1))}}throw last};
@@ -15,7 +15,7 @@
     await Promise.allSettled([loadScript('./content-v3.js'),loadScript('./content-v3-extra.js')]);
     await loadScript('./media-depth-v1.js',3);
     await loadScript('./lesson-french-v2.js',3);
-    await loadScript('./logic-v2.js',4);
+    await loadScript('./logic-runtime.js',4);
     await waitFor(()=>document.querySelector('#dialTicks')?.children.length>0);
     await loadScript('./timeline-v4.js',3);
     await loadScript('./compat-v3.js',2).catch(err=>console.warn('CHRONOS optional polish skipped',err));

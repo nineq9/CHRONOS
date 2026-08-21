@@ -1,0 +1,71 @@
+(()=>{
+'use strict';
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const view=$('#view');
+const visited=new Set(JSON.parse(localStorage.getItem('chronos-museum-v3-visited')||'[]'));
+let currentTopic='viking';
+
+const IMG={
+ viking:'https://commons.wikimedia.org/wiki/Special:FilePath/Osebergskipet.jpg?width=1200',
+ egypt:'https://commons.wikimedia.org/wiki/Special:FilePath/All_Gizah_Pyramids.jpg?width=1200',
+ rome:'https://commons.wikimedia.org/wiki/Special:FilePath/Colosseum_in_Rome,_Italy_-_April_2007.jpg?width=1200',
+ mongol:'https://commons.wikimedia.org/wiki/Special:FilePath/Genghis_Khan.jpg?width=1200',
+ france:'https://commons.wikimedia.org/wiki/Special:FilePath/Prise_de_la_Bastille.jpg?width=1200',
+ abbasid:'https://commons.wikimedia.org/wiki/Special:FilePath/Abbasid_Caliphate_850AD.png?width=1200',
+ silk:'https://commons.wikimedia.org/wiki/Special:FilePath/Silk_route.jpg?width=1200',
+ china:'https://commons.wikimedia.org/wiki/Special:FilePath/Tang_Dynasty_Circa_700_CE.png?width=1200'
+};
+
+const topics={
+ viking:{name:'ヴァイキング時代',period:'793–1066',region:'北欧・ヨーロッパ',sub:'海を越えた人々',hook:'ヴァイキングは、本当に「海賊」だったのでしょうか。',image:IMG.viking,route:['ヴァイキングとは？','普通の暮らし','なぜ海へ出た？','船は何がすごかった？','略奪と交易','東へ向かった人々','北欧神話と信仰','女性と社会','イングランド','国家形成','北米への航海','何を残した？'],tags:['北欧神話','船と技術','女性','イングランド','東方進出']},
+ egypt:{name:'古代エジプト',period:'前3100–前30',region:'北アフリカ',sub:'ナイルがつくった文明',hook:'なぜ巨大な国家が、砂漠の中で3000年近く続いたのでしょう。',image:IMG.egypt,route:['ナイル川と農業','ファラオとは？','ピラミッドはなぜ作られた？','死後の世界','文字と書記','女性と家族','神々と信仰','交易と外交'],tags:['ピラミッド','ミイラ','神々','女性','暮らし']},
+ rome:{name:'ローマ帝国',period:'前27–395',region:'地中海世界',sub:'都市・道路・法がつないだ帝国',hook:'なぜローマの制度は、帝国が消えた後も残り続けたのでしょう。',image:IMG.rome,route:['共和政から帝政へ','ローマ市民とは？','道路と都市','軍団','奴隷制','宗教','パンと見世物','帝国の分裂'],tags:['コロッセオ','軍団','法律','キリスト教','暮らし']},
+ mongol:{name:'モンゴル帝国',period:'1206–1368',region:'ユーラシア',sub:'草原から世界最大級の帝国へ',hook:'遊牧社会は、どうやってユーラシアの広大な地域をつないだのでしょう。',image:IMG.mongol,route:['草原の暮らし','チンギス・カン','騎馬軍事','征服と統治','シルクロード','宗教の共存','元朝','帝国の分裂'],tags:['遊牧','交易','軍事','元朝','シルクロード']},
+ france:{name:'フランス革命',period:'1789–1799',region:'フランス',sub:'身分社会が崩れた10年',hook:'革命は「自由」という思想だけで起きたのでしょうか。',image:IMG.france,route:['革命前の社会','財政危機','パンの価格','三部会','バスティーユ','人権宣言','王政廃止','恐怖政治'],tags:['人権','パン','王政','女性','ナポレオン']},
+ abbasid:{name:'イスラム黄金時代',period:'8–13世紀',region:'西アジア',sub:'知識が集まり、翻訳され、広がった時代',hook:'なぜバグダードは世界有数の学問都市になったのでしょう。',image:IMG.abbasid,route:['アッバース朝','バグダード','翻訳運動','数学','医学','天文学','紙と本','交易ネットワーク'],tags:['バグダード','数学','医学','本','交易']},
+ silk:{name:'シルクロード',period:'前2世紀–15世紀',region:'ユーラシア',sub:'人・物・宗教が移動したネットワーク',hook:'シルクロードは、本当に一本の「道」だったのでしょうか。',image:IMG.silk,route:['交易路とは？','絹','ソグド人','仏教の移動','紙の伝播','都市とオアシス','海の道','モンゴル時代'],tags:['交易','宗教','紙','都市','旅']},
+ china:{name:'唐',period:'618–907',region:'東アジア',sub:'国際都市・長安の時代',hook:'長安には、なぜ世界各地の人と文化が集まったのでしょう。',image:IMG.china,route:['唐の成立','長安','科挙','シルクロード','女性','宗教','詩と文化','安史の乱'],tags:['長安','科挙','女性','詩','交易']}
+};
+
+const articleBodies={
+ 'ヴァイキングとは？':['「ヴァイキング」は、一つの民族全体を指す言葉として使うと実態が見えにくくなります。8〜11世紀の北欧社会には、農民、職人、商人、戦士など多様な人々が暮らしていました。','その一部が船で海へ出て、交易、略奪、移住、軍事活動に関わりました。つまり「海賊だけの社会」ではありません。','最初にこの幅を知ると、なぜ彼らが西ヨーロッパだけでなく東ヨーロッパや北大西洋へも広がったのかが理解しやすくなります。'],
+ 'なぜ海へ出た？':['北欧の人々が海へ出た理由は一つではありません。土地や人口の条件だけでなく、船舶技術、交易機会、政治的競争などが重なっていました。','重要なのは「貧しかったから海賊になった」という単純な物語にしないことです。交易と略奪は同じ航路・船・人間関係の上で起きることもありました。','複数の条件が同じ時期に重なったとき、北海とバルト海は障壁ではなく巨大な交通網になっていきました。']
+};
+
+function save(){localStorage.setItem('chronos-museum-v3-visited',JSON.stringify([...visited]));}
+function nav(name){$$('.bottom-nav button').forEach(b=>b.classList.toggle('active',b.dataset.go===name));}
+function heroCard(id){const t=topics[id];return `<button class="theme-card" data-topic="${id}"><img src="${t.image}" alt="" onerror="this.style.opacity=.18"><div class="copy"><small>${t.period}</small><strong>${t.name}</strong><p>${t.sub}</p></div></button>`}
+function sectionTitle(label,title,more=''){return `<div class="section-head"><div><div class="kicker">${label}</div><h2>${title}</h2></div>${more?`<button data-go="${more}">すべて見る →</button>`:''}</div>`}
+
+function home(){nav('home');const first=visited.size?[...visited][visited.size-1]:null;const continueTopic=first?.split('|')[0]||'viking';const t=topics[continueTopic];view.innerHTML=`<div class="page"><div class="kicker">WORLD HISTORY, CONNECTED</div><h1 class="page-title">気になる歴史から始める。</h1><p class="page-lead">迷ったらおすすめルートから。知りたいことがあれば、好きな入口から自由に。</p><div class="search-box" data-go="discover"><span>⌕</span><input aria-label="検索" placeholder="人物・時代・出来事を探す" readonly></div>
+<section class="hero-feature" data-topic="viking"><img src="${IMG.viking}" alt="" onerror="this.style.opacity=.15"><div class="hero-copy"><small>FOR YOU · ${topics.viking.period}</small><h2>${topics.viking.name}</h2><p>${topics.viking.hook}</p><div class="meta"><span>おすすめルート 12</span><span>約35分</span></div></div></section>
+<section class="section">${sectionTitle('CONTINUE','続きから')}<button class="continue-row" data-topic="${continueTopic}"><div><small>${t.period}</small><strong>${t.name}</strong><p>${visited.size?`${visited.size}件を探索済み`:'まだ始めていません'}</p></div><span>→</span></button></section>
+<section class="section">${sectionTitle('DISCOVER','気になるところから探す','discover')}<div class="theme-rail">${['egypt','rome','mongol','france'].map(heroCard).join('')}</div></section>
+<section class="section">${sectionTitle('BROWSE','別の入口から')}<div class="category-grid"><button data-filter="period"><small>PERIOD</small><strong>時代から</strong></button><button data-filter="place"><small>PLACE</small><strong>地域から</strong></button><button data-filter="theme"><small>THEME</small><strong>テーマから</strong></button><button data-go="timeline"><small>TIME</small><strong>同じ時代を見る</strong></button></div></section></div>`}
+
+function discover(filter='all'){nav('discover');const cards=Object.keys(topics).map(heroCard).join('');view.innerHTML=`<div class="page"><div class="kicker">DISCOVER</div><h1 class="page-title">世界史を探索する</h1><p class="page-lead">作品を探すように、時代・場所・テーマから歴史を見つけます。</p><div class="search-box"><span>⌕</span><input id="topicSearch" placeholder="例：ローマ、女性、交易"></div>
+<section class="section">${sectionTitle('HIGHLIGHTS','おすすめ')}<div class="theme-rail" id="discoverCards">${cards}</div></section>
+<section class="browse-block">${sectionTitle('BROWSE BY','入口を選ぶ')}<div class="browse-row"><button data-filter="period"><strong>時代から</strong><span>古代 / 中世 / 近世 / 近代 →</span></button><button data-filter="place"><strong>地域から</strong><span>ヨーロッパ / 東アジア / 西アジア →</span></button><button data-filter="theme"><strong>テーマから</strong><span>暮らし / 宗教 / 戦争 / 交易 →</span></button></div></section>
+<section class="section"><div class="kicker">ALL STORIES</div><div class="route-list" id="allStories">${Object.entries(topics).map(([id,t],i)=>`<button data-topic="${id}"><small>${String(i+1).padStart(2,'0')}</small><strong>${t.name}<br><span style="color:var(--muted);font:400 11px var(--sans)">${t.period} · ${t.region}</span></strong><span>→</span></button>`).join('')}</div></section></div>`;
+ const input=$('#topicSearch');input?.addEventListener('input',()=>{const q=input.value.trim().toLowerCase();$$('#allStories button').forEach(b=>{const txt=b.textContent.toLowerCase();b.style.display=!q||txt.includes(q)?'grid':'none'})})}
+
+function topic(id){currentTopic=id;const t=topics[id];view.innerHTML=`<div class="page"><button class="back-button" data-go="discover">← DISCOVER</button><section class="topic-hero"><img src="${t.image}" alt="" onerror="this.style.opacity=.15"><div><div class="topic-meta"><span>${t.period}</span><span>${t.region}</span></div><h1>${t.name}</h1><p>${t.hook}</p><button class="primary-line" data-article="0"><span>この物語を始める</span><span>→</span></button></div></section>
+<section class="section">${sectionTitle('GUIDED ROUTE','おすすめルート')}<div class="route-list">${t.route.map((r,i)=>`<button data-article="${i}"><small>${String(i+1).padStart(2,'0')}</small><strong>${r}</strong><span>${visited.has(id+'|'+i)?'●':'→'}</span></button>`).join('')}</div></section>
+<section class="section">${sectionTitle('EXPLORE FREELY','気になるところから')}<div class="tag-row">${t.tags.map((x,i)=>`<button data-article="${Math.min(i+1,t.route.length-1)}">${x}</button>`).join('')}</div></section></div>`}
+
+function article(index){const t=topics[currentTopic];const title=t.route[index];visited.add(currentTopic+'|'+index);save();const body=articleBodies[title]||[`${title}を理解するには、年号だけでなく、その時代の暮らし・制度・技術・周辺地域との関係を見る必要があります。`,`${t.name}の中でも、このテーマは別の出来事とつながっています。CHRONOSでは一つの記事で終わらず、次の疑問へ進みながら全体像を組み立てます。`,`おすすめルートに戻って順番に進むことも、下の関連テーマから横道へ入ることもできます。`];const unlocked=visited.size>=3;view.innerHTML=`<div class="page article"><button class="back-button" data-topic="${currentTopic}">← ${t.name}</button><div class="article-no">${String(index+1).padStart(2,'0')} / ${String(t.route.length).padStart(2,'0')} · ${t.period}</div><h1>${title}</h1><p class="dek">${t.sub}</p>${body.map(p=>`<p>${p}</p>`).join('')}<aside class="article-aside"><small>WHY IT MATTERS</small><strong>ひとつの出来事を、別の時代や地域とつなげて見る。</strong></aside><section class="section">${sectionTitle('CONNECTIONS','ここからつながる')}<div class="connections"><button data-article="${Math.min(index+1,t.route.length-1)}"><strong>${t.route[Math.min(index+1,t.route.length-1)]}</strong><span>→</span></button><button data-go="timeline"><strong>同じ時代の世界を見る</strong><span>→</span></button><button data-topic="${currentTopic}"><strong>おすすめルートに戻る</strong><span>→</span></button></div></section>${unlocked?`<section class="mission-unlock"><small>MISSION UNLOCKED</small><h3>ここまで読んだ内容を、自分で確かめる。</h3><p>MISSIONは独立タブではなく、理解がたまったところで自然に現れます。</p><button class="primary-line" data-mission><span>調査課題を見る</span><span>→</span></button></section>`:''}</div>`}
+
+function mission(){const t=topics[currentTopic];view.innerHTML=`<div class="page article"><button class="back-button" data-topic="${currentTopic}">← ${t.name}</button><div class="kicker">MISSION · DISCOVER</div><h1 class="page-title">「${t.name}」を、説明できるところまで調べる。</h1><p class="page-lead">答えを先に読むのではなく、CHRONOS内の3つの入口から手がかりを集めます。</p><div class="rule"></div><div class="route-list">${t.route.slice(0,3).map((r,i)=>`<button data-article="${i}"><small>CLUE ${i+1}</small><strong>${r}</strong><span>${visited.has(currentTopic+'|'+i)?'調査済み':'→'}</span></button>`).join('')}</div><section class="mission-unlock"><small>FINAL TEST</small><h3>なぜこの時代は大きく動いたのでしょう？</h3><p>最終版では、ここで自分の言葉による説明と理解チェックを行います。</p></section></div>`}
+
+function timeline(){nav('timeline');view.innerHTML=`<div class="page"><div class="kicker">TIMELINE</div><h1 class="page-title">同じ瞬間の世界を見る</h1><p class="page-lead">年表を「出来事のリスト」ではなく、同じ時代に存在した複数の世界として見せます。</p><div class="timeline-strip">${[{y:'800頃',n:'ヴァイキング時代',p:'北海とバルト海の移動が活発化。'},{y:'800頃',n:'アッバース朝',p:'バグダードが巨大な知識と交易の中心へ。'},{y:'800頃',n:'唐',p:'長安を中心に多文化的な都市社会。'}].map(x=>`<button class="time-card"><small>${x.y}</small><h3>${x.n}</h3><p>${x.p}</p></button>`).join('')}</div><section class="section">${sectionTitle('SAME WORLD','西暦800年ごろ')}<div class="same-world"><div><small>北欧</small><strong>ヴァイキング時代</strong></div><div><small>西アジア</small><strong>アッバース朝・バグダード</strong></div><div><small>東アジア</small><strong>唐・長安</strong></div><div><small>日本</small><strong>平安時代の始まり</strong></div></div></section><section class="section">${sectionTitle('OPEN A STORY','この時代から読む')}<div class="theme-rail">${['viking','abbasid','china'].map(heroCard).join('')}</div></section></div>`}
+
+function my(){nav('my');const percent=Math.min(100,Math.round(visited.size/40*100));view.innerHTML=`<div class="page"><div class="kicker">MY CHRONOS</div><h1 class="page-title">自分が理解した世界史</h1><p class="page-lead">読んだ数だけではなく、将来は「説明できる領域」がここに残ります。</p><section class="progress-hero"><div class="progress-value"><strong>${percent}%</strong><span>OF YOUR HISTORY MAP</span></div><div class="progress-line"><i style="width:${percent}%"></i></div></section><section class="section">${sectionTitle('REGIONS','理解した地域')}<div class="region-list"><div><span>北欧</span><b><i style="width:${Math.min(90,visited.size*12)}%"></i></b><em>${Math.min(90,visited.size*12)}%</em></div><div><span>西ヨーロッパ</span><b><i style="width:21%"></i></b><em>21%</em></div><div><span>西アジア</span><b><i style="width:8%"></i></b><em>8%</em></div><div><span>東アジア</span><b><i style="width:4%"></i></b><em>4%</em></div></div></section><section class="section">${sectionTitle('NEXT FRONTIER','まだ知らない世界')}<div class="route-list"><button data-topic="abbasid"><small>01</small><strong>イスラム黄金時代</strong><span>→</span></button><button data-topic="china"><small>02</small><strong>唐</strong><span>→</span></button><button data-topic="mongol"><small>03</small><strong>モンゴル帝国</strong><span>→</span></button></div></section></div>`}
+
+function route(name){history.replaceState(null,'',`#${name}`);if(name==='home')home();else if(name==='discover')discover();else if(name==='timeline')timeline();else if(name==='my')my();window.scrollTo({top:0,behavior:'instant'})}
+
+document.addEventListener('click',e=>{const go=e.target.closest('[data-go]');if(go){route(go.dataset.go);return}const tp=e.target.closest('[data-topic]');if(tp){history.replaceState(null,'',`#topic-${tp.dataset.topic}`);topic(tp.dataset.topic);window.scrollTo({top:0,behavior:'instant'});return}const ar=e.target.closest('[data-article]');if(ar){article(Number(ar.dataset.article));window.scrollTo({top:0,behavior:'instant'});return}if(e.target.closest('[data-mission]')){mission();window.scrollTo({top:0,behavior:'instant'});return}const filter=e.target.closest('[data-filter]');if(filter){route('discover');return}});
+$('#themeButton').addEventListener('click',()=>{const next=document.documentElement.dataset.theme==='light'?'dark':'light';document.documentElement.dataset.theme=next;localStorage.setItem('chronos-museum-v3-theme',next)});
+const savedTheme=localStorage.getItem('chronos-museum-v3-theme');if(savedTheme)document.documentElement.dataset.theme=savedTheme;
+const hash=(location.hash||'#home').slice(1);if(hash.startsWith('topic-'))topic(hash.slice(6));else if(['home','discover','timeline','my'].includes(hash))route(hash);else home();
+})();

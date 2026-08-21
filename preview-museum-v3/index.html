@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ja" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#11110f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>CHRONOS — Museum UI Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Noto+Serif+JP:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css?v=3">
+</head>
+<body>
+<div id="app">
+  <header class="site-header">
+    <button class="brand" data-go="home" aria-label="CHRONOS home">CHRONOS</button>
+    <div class="header-actions">
+      <button class="header-icon" id="themeButton" aria-label="テーマ切替">◐</button>
+      <button class="header-icon" data-go="discover" aria-label="検索">⌕</button>
+    </div>
+  </header>
+
+  <main id="view"></main>
+
+  <nav class="bottom-nav" aria-label="Main navigation">
+    <button data-go="home" class="active"><span class="nav-mark">⌂</span><span>HOME</span></button>
+    <button data-go="discover"><span class="nav-mark">◇</span><span>DISCOVER</span></button>
+    <button data-go="timeline"><span class="nav-mark">—</span><span>TIMELINE</span></button>
+    <button data-go="my"><span class="nav-mark">◌</span><span>MY CHRONOS</span></button>
+  </nav>
+</div>
+<script src="./app.js?v=3"></script>
+</body>
+</html>
